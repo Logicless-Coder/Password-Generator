@@ -1,6 +1,9 @@
 import React, { Component } from "react";
 import Slider from "react-input-slider";
+import { CopyToClipboard } from "react-copy-to-clipboard";
 import "./PasswordGen.css";
+
+import { FaRegCopy } from "react-icons/fa";
 
 class PasswordGen extends Component {
   constructor(props) {
@@ -13,6 +16,7 @@ class PasswordGen extends Component {
       upper: true,
       digits: true,
       symbols: true,
+      copySuccess: false,
     };
   }
 
@@ -23,32 +27,59 @@ class PasswordGen extends Component {
         allowedChars.push(String.fromCharCode(i));
       }
     }
+    if (this.state.upper) {
+      for (let i = 65; i < 91; i++) {
+        allowedChars.push(String.fromCharCode(i));
+      }
+    }
+    if (this.state.digits) {
+      for (let i = 48; i < 58; i++) {
+        allowedChars.push(String.fromCharCode(i));
+      }
+    }
+    if (this.state.symbols) {
+      for (let i = 33; i < 48; i++) {
+        allowedChars.push(String.fromCharCode(i));
+      }
+      for (let i = 58; i < 65; i++) {
+        allowedChars.push(String.fromCharCode(i));
+      }
+    }
 
     console.log(allowedChars);
+    var generatedPassword = "";
+    for (let l = 0; l < this.state.length; l++) {
+      var r = Math.floor(Math.random() * allowedChars.length);
+      generatedPassword += allowedChars[r];
+    }
+
+    console.log(generatedPassword);
+    this.setState({
+      pwd: generatedPassword,
+    });
   };
 
   handleChange = (event) => {
-    switch (event.target.name) {
-      case "lower":
-        this.setState({
-          lower: !this.state.lower,
-        });
-        break;
-      case "upper":
-        this.setState({
-          upper: !this.state.upper,
-        });
-        break;
-      case "digits":
-        this.setState({
-          digits: !this.state.digits,
-        });
-        break;
-      case "symbols":
-        this.setState({
-          symbols: !this.state.symbols,
-        });
-        break;
+    var labl = event.target.name;
+    if (labl === "lower") {
+      this.setState({
+        lower: !this.state.lower,
+      });
+    }
+    if (labl === "upper") {
+      this.setState({
+        upper: !this.state.upper,
+      });
+    }
+    if (labl === "digits") {
+      this.setState({
+        digits: !this.state.digits,
+      });
+    }
+    if (labl === "symbols") {
+      this.setState({
+        symbols: !this.state.symbols,
+      });
     }
   };
 
@@ -57,12 +88,28 @@ class PasswordGen extends Component {
       <div className="main">
         <h1 className="header">Generate a strong Password</h1>
         <div className="pwd-gen">
-          <input
-            className="pwd-field"
-            type="text"
-            placeholder="Generated password will be shown here"
-            value={this.state.pwd}
-          />
+          <div className="pwd-display">
+            <input
+              className="pwd-field"
+              type="text"
+              placeholder="Generated password will be shown here"
+              value={this.state.pwd}
+            />
+            <CopyToClipboard
+              text={this.state.pwd}
+              className="copy-button"
+              onCopy={() => this.setState({ copySuccess: true })}
+            >
+              <button>
+                <FaRegCopy />
+              </button>
+            </CopyToClipboard>
+            <div className="copy-message">
+              {this.state.copySuccess ? (
+                <span style={{ border: "2px solid #2f3542" }}>Copied.</span>
+              ) : null}
+            </div>
+          </div>
           <div className="slider-box">
             <label className="length-label">{this.state.length}</label>
             <Slider
