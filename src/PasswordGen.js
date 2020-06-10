@@ -8,9 +8,49 @@ class PasswordGen extends Component {
 
     this.state = {
       pwd: "",
-      length: 1,
+      length: 12,
+      lower: true,
+      upper: true,
+      digits: true,
+      symbols: true,
     };
   }
+
+  generatePassword = () => {
+    var allowedChars = [];
+    if (this.state.lower) {
+      for (let i = 97; i < 123; i++) {
+        allowedChars.push(String.fromCharCode(i));
+      }
+    }
+
+    console.log(allowedChars);
+  };
+
+  handleChange = (event) => {
+    switch (event.target.name) {
+      case "lower":
+        this.setState({
+          lower: !this.state.lower,
+        });
+        break;
+      case "upper":
+        this.setState({
+          upper: !this.state.upper,
+        });
+        break;
+      case "digits":
+        this.setState({
+          digits: !this.state.digits,
+        });
+        break;
+      case "symbols":
+        this.setState({
+          symbols: !this.state.symbols,
+        });
+        break;
+    }
+  };
 
   render() {
     return (
@@ -21,6 +61,7 @@ class PasswordGen extends Component {
             className="pwd-field"
             type="text"
             placeholder="Generated password will be shown here"
+            value={this.state.pwd}
           />
           <div className="slider-box">
             <label className="length-label">{this.state.length}</label>
@@ -45,7 +86,51 @@ class PasswordGen extends Component {
             />
           </div>
           <div className="conditions">
-            <input type="checkbox" text="a-z" />
+            <label className="checkbox-label">
+              <input
+                type="checkbox"
+                className="checkbox"
+                name="lower"
+                onClick={this.handleChange}
+                checked={this.state.lower}
+              />
+              a - z
+            </label>
+            <label className="checkbox-label">
+              <input
+                type="checkbox"
+                className="checkbox"
+                name="upper"
+                onClick={this.handleChange}
+                checked={this.state.upper}
+              />
+              A - Z
+            </label>
+            <label className="checkbox-label">
+              <input
+                type="checkbox"
+                className="checkbox"
+                name="digits"
+                onClick={this.handleChange}
+                checked={this.state.digits}
+              />
+              0 - 9
+            </label>
+            <label className="checkbox-label">
+              <input
+                type="checkbox"
+                className="checkbox"
+                name="symbols"
+                onClick={this.handleChange}
+                checked={this.state.symbols}
+              />
+              Symbols
+            </label>
+          </div>
+          <div className="button-box">
+            <button onClick={this.generatePassword} className="generate-button">
+              Generate
+            </button>
           </div>
         </div>
       </div>
