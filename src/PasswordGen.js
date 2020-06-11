@@ -105,9 +105,7 @@ class PasswordGen extends Component {
               </button>
             </CopyToClipboard>
             <div className="copy-message">
-              {this.state.copySuccess ? (
-                <span style={{ border: "2px solid #2f3542" }}>Copied.</span>
-              ) : null}
+              {this.state.copySuccess ? <span>Copied.</span> : null}
             </div>
           </div>
           <div className="slider-box">
